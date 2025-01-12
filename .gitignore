@@ -42,3 +42,6 @@ next-env.d.ts
 
 #bunx
 bun.lockb
+
+# convex database
+convex/_generated
