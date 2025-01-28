@@ -3,7 +3,7 @@
 
 ## Getting Started
 
-First, run the development server:
+We're using node v20. First, run the development server:
 
 ```bash
 npm run dev
@@ -13,6 +13,12 @@ yarn dev
 pnpm dev
 # or
 bun dev
+
+
+# Run the convex (backend) server
+bunx convex dev
+# or
+npx convex dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

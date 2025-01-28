@@ -6,6 +6,9 @@ import { Analytics } from '@vercel/analytics/react';
 // context
 import { ConvexClientProvider } from '@/components/convex-client-provider';
 
+// convex
+import { ConvexAuthNextjsServerProvider } from '@convex-dev/auth/nextjs/server';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -27,15 +30,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ConvexClientProvider>{children}</ConvexClientProvider>
-      </body>
+    <ConvexAuthNextjsServerProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <ConvexClientProvider>{children}</ConvexClientProvider>
+        </body>
 
-      {/* vercel analytics */}
-      <Analytics />
-    </html>
+        {/* vercel analytics */}
+        <Analytics />
+      </html>
+    </ConvexAuthNextjsServerProvider>
   );
 }
