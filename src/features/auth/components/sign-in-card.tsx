@@ -23,9 +23,13 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [pending, setPending] = useState(false);
 
-  const handleProviderSignin = (value: 'github' | 'google') => {
-    signIn(value);
+  const onProviderSignin = (value: 'github' | 'google') => {
+    setPending(true);
+    signIn(value).finally(() => {
+      setPending(false);
+    });
   };
 
   return (
@@ -45,7 +49,7 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
             value={email}
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
-            disabled={false}
+            disabled={pending}
             required
           />
           <Input
@@ -53,11 +57,11 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            disabled={false}
+            disabled={pending}
             required
           />
 
-          <Button type="submit" className="w-full" size="lg" disabled={false}>
+          <Button type="submit" className="w-full" size="lg" disabled={pending}>
             Continue
           </Button>
         </form>
@@ -69,8 +73,8 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
             className="w-full relative"
             variant="outline"
             size="lg"
-            disabled={false}
-            onClick={() => {}}
+            disabled={pending}
+            onClick={() => onProviderSignin('google')}
           >
             <FcGoogle className="size-5 absolute top-3 left-2.5" />
             Continue with Google
@@ -79,8 +83,8 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
             className="w-full relative"
             variant="outline"
             size="lg"
-            disabled={false}
-            onClick={() => handleProviderSignin('github')}
+            disabled={pending}
+            onClick={() => onProviderSignin('github')}
           >
             <FaGithub className="size-5 absolute top-2.5 left-2.5" />
             Continue with Github
