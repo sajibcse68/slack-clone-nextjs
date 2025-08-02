@@ -9,7 +9,7 @@ import { ConvexClientProvider } from '@/components/convex-client-provider';
 
 // convex
 import { ConvexAuthNextjsServerProvider } from '@convex-dev/auth/nextjs/server';
-import { Modals } from '@/components/ui/modals';
+import { Modals } from '@/components/modals';
 import { JotaiProvider } from '@/components/jotai-provider';
 
 const geistSans = Geist({
