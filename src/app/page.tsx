@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter();
-  const [ open, setOpen] = useCreateWorkspaceModal();
+  const [open, setOpen] = useCreateWorkspaceModal();
   const { data, isLoading } = useGetWorkspaces();
   const workplaceId = useMemo(() => data?.[0]?._id, [data]);
 
@@ -16,10 +16,10 @@ export default function Home() {
 
     if (workplaceId) {
       router.replace(`/workspace/${workplaceId}`);
-    } else if(!open) {
+    } else if (!open) {
       setOpen(true);
     }
-  }, [workplaceId, isLoading])
+  }, [workplaceId, isLoading, open, router, setOpen]);
 
   return (
     <div>
