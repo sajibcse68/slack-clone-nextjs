@@ -8,6 +8,10 @@ import { cn } from '@/lib/utils';
 import 'quill/dist/quill.snow.css';
 import { Button } from './ui/button';
 import { Hint } from './hint';
+import { EmojiPopover } from './emoji-popover';
+
+// constants
+import { EDITOR_VARIANT } from '@/constants';
 
 type EditorValue = {
   image: File | null;
@@ -15,7 +19,7 @@ type EditorValue = {
 };
 
 interface EditorProps {
-  variant?: 'create' | 'update';
+  variant?: EDITOR_VARIANT;
   defaultValue?: Delta | Op[];
   placeholder?: string;
   disabled?: boolean;
@@ -25,7 +29,7 @@ interface EditorProps {
 }
 
 const Editor = ({
-  variant = 'create',
+  variant = EDITOR_VARIANT.CREATE,
   placeholder = 'Write something...',
   defaultValue,
   innerRef,
@@ -125,7 +129,16 @@ const Editor = ({
 
     if (toolbarElement) {
       toolbarElement.classList.toggle('hidden');
-    } 
+    }
+  };
+
+  const handleEmojiSelect = (emoji: any) => {
+    const quill = quillRef.current;
+    if (!quill) return;
+
+    const cursorPosition = quill.getSelection(true)?.index || 0;
+
+    quill.insertText(cursorPosition, emoji.native);
   };
 
   const isEmpty = text.replace(/<(.|\n)*?/g, '').trim().length === 0;
@@ -147,18 +160,13 @@ const Editor = ({
               <PiTextAa className="size-4" />
             </Button>
           </Hint>
-          <Hint label="Emoji">
-            <Button
-              variant="ghost"
-              disabled={disabled}
-              size="iconSm"
-              onClick={() => {}}
-            >
+          <EmojiPopover onEmojiSelect={handleEmojiSelect}>
+            <Button variant="ghost" disabled={disabled} size="iconSm">
               <Smile className="size-4" />
             </Button>
-          </Hint>
+          </EmojiPopover>
 
-          {variant === 'create' && (
+          {variant === EDITOR_VARIANT.CREATE && (
             <Hint label="Image">
               <Button
                 variant="ghost"
@@ -171,7 +179,7 @@ const Editor = ({
             </Hint>
           )}
 
-          {variant === 'update' && (
+          {variant === EDITOR_VARIANT.UPDATE && (
             <div className="ml-auto flex items-center gap-x-2">
               <Button
                 variant="outline"
@@ -192,7 +200,7 @@ const Editor = ({
             </div>
           )}
 
-          {variant === 'create' && (
+          {variant === EDITOR_VARIANT.CREATE && (
             <Button
               className={cn(
                 'ml-auto',
@@ -210,9 +218,16 @@ const Editor = ({
         </div>
       </div>
 
-      <p className="p-2 text-[10px] text-muted-foreground flex justify-end">
-        <strong>Shift + Return</strong> &nbsp; to add a new line
-      </p>
+      {variant === EDITOR_VARIANT.CREATE && (
+        <p
+          className={cn(
+            'p-2 text-[10px] text-muted-foreground flex justify-end opacity-0 transition',
+            !isEmpty && 'opacity-100'
+          )}
+        >
+          <strong>Shift + Return</strong> &nbsp; to add a new line
+        </p>
+      )}
     </div>
   );
 };
